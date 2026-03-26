@@ -1,7 +1,5 @@
-
-from pynput.keyboard import Key,Controller
+from pyautogui import typewrite
 from time import sleep
 
-keyboard = Controller()
-
-keyboard.type("Hello World")
+sleep(2)
+typewrite("text")

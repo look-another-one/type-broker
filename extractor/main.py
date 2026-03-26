@@ -2,15 +2,22 @@ import pytesseract
 from PIL import Image
 from pathlib import Path
 from time import sleep
-from pynput.keyboard import Key,Controller
-from time import sleep
+from pyautogui import typewrite
 project_root = Path(__file__).parent.parent # give the location of folder
 
 img_loc =  project_root / "assets" / "image.png"
 
+def fetch():
+    global text
+    print("Fetching text from image..")
+    text = pytesseract.image_to_string(Image.open(img_loc))
+    print("Fetching Completed")
+    print("Cleaning...")
+    text = text.replace("\n"," ")
+    print("Cleaning Completed...")
 
-text = pytesseract.image_to_string(Image.open(img_loc))
-
-keyboard = Controller()
-sleep(4)
-keyboard.type(text)
+def types():
+    sleep(2)
+    print("Typing")
+    typewrite(text,interval=0.025)
+    print("Typing Completed")
