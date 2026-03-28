@@ -311,6 +311,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "opencv-python" },
+    { name = "pillow" },
     { name = "pyautogui" },
     { name = "pytesseract" },
 ]
@@ -318,6 +319,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "opencv-python", specifier = ">=4.13.0.92" },
+    { name = "pillow", specifier = ">=12.1.1" },
     { name = "pyautogui", specifier = ">=0.9.54" },
     { name = "pytesseract", specifier = ">=0.3.13" },
 ]

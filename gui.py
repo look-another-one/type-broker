@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from main import types , fetch
+from main import types , fetch , get_img , img_cleaning
 
 # Fetch - (take screenshot, fetching text), type - (type the fetched text) , stop (emgergency stop) 
 speed_value = 0.06 
@@ -9,7 +9,7 @@ root = tk.Tk()
 
 root.title("The Title")
 root.geometry("400x300")  # width x height
-
+# Get img 
 fetch = tk.Button(root, text="Fetch",bg="blue", fg="white",command=fetch)
 fetch.grid()
 

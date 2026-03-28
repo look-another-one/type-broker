@@ -2,26 +2,43 @@ import pytesseract
 from PIL import Image
 from pathlib import Path
 from time import sleep
-from pyautogui import typewrite
-import cv2
+from pyautogui import typewrite , screenshot
 import re
 import subprocess
+import time
+import cv2
 # ------ What i want -------  
-# Take Full Screen shot of app - Done Do it later rn doing it mannuly 
+# Take Full Screen shot of app - (Done) 
 # Then ocr over it -- (DONE)
-# then clean -- (Working on rn)
+# then clean -- (DONE)
 # Then Start typing it - Control by gui
 
 
 project_root = Path(__file__).parent # give the location of folder
 assets = project_root / "assets"
-img_loc =  project_root / "assets" / "image.png"
+# img_loc =  project_root / "assets" / "image.png"
+img_loc = project_root / "image.png"
 
 def get_img():
-    postion = subprocess.check_output(["wmctrl", "-l", "-G"]).decode("utf-8")
+    target_title = "TypeRacer"
+    output = subprocess.check_output(["wmctrl", "-l", "-G"]).decode("utf-8")
     window_data = None
-    for window in postion.splitlines():
-        print(window)
+    for line in output.splitlines():
+        if target_title in line:
+            window_data = line.split()
+            break
+    if window_data is None:
+        print(f"Window '{target_title}' not found")
+        return
+    
+    x = int(window_data[2])
+    y = int(window_data[3])
+    w = int(window_data[4])
+    h = int(window_data[5])
+
+    print("here")
+    shot = screenshot(region=(x, y, w, h))
+    shot.save("image.png")
 
 def img_cleaning(img):
     global dst
@@ -40,7 +57,7 @@ def types(text):
     print("Typing Completed")
 
 def fetch(img):
-    global text
+    global clean_paragraph
     text = pytesseract.image_to_string(img,config="--psm 4")
     text = text.replace("\n"," ")
     # 1. Find the last occurrence of '0wpm' or 'Owpm'
@@ -65,6 +82,3 @@ def fetch(img):
     
     return clean_paragraph
 
-# img_cleaning(img_loc)
-# fetch(dst)
-get_img()
