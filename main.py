@@ -2,12 +2,14 @@ import pytesseract
 from PIL import Image
 from pathlib import Path
 from time import sleep
-from pyautogui import typewrite , screenshot, position
+from pyautogui import typewrite , screenshot, click , press
 import re
 import subprocess
 import cv2 # pyright: ignore[reportMissingImports]
 import time 
 import tkinter as tk
+import easyocr
+from textblob import TextBlob
 
 # TODO: Next Bypass Cheat Detection Captcha 
 
@@ -49,7 +51,7 @@ def img_cleaning(img):
 def types(text):
     sleep(2)
     print("Typing")
-    typewrite(text, interval=0.03)
+    typewrite(text, interval=0.024)
     print("Typing Completed")
 
 def fetch(img):
@@ -83,6 +85,8 @@ def start():
     img_cleaning(img_loc)
     fetch(dst)
 
+# --------------- GUI -------------------
+
 def gui():
     root = tk.Tk()
     root.title("The Title")
@@ -94,43 +98,70 @@ def gui():
     start_typing = tk.Button(root, text="Start Typing",bg="blue", fg="white",command=lambda :types(clean_paragraph))
     start_typing.pack()
 
-    # Fetch Text from Captcha
-    fetch_captcha = tk.Button(root, text="Fetch Captcha",bg="blue", fg="white",command=lambda :types(clean_paragraph))
-    fetch_captcha.pack()
-    # Start Typing Captcha
-    solve_captcha = tk.Button(root, text="Solve Captcha",bg="blue", fg="white",command=lambda :types(clean_paragraph))
-    solve_captcha.pack()
+    # Solve Captcha
+    solve_cp = tk.Button(root, text="Solve Captcha",bg="blue", fg="white",command=lambda : solve_captcha())
+    solve_cp.pack()
     root.mainloop()
 
 # --------------------- Captcha Related --------------------
 
 
-def get_text(img):
-    text = pytesseract.image_to_string(img,config="--psm 3")
-    # text = text.replace("\n"," ")
-    return print(text)
 
-def captcha_clean(img):
-    global dst
+
+def captcha_clean(image): #Done
+    global final_img 
     
-    gray_img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
-    _, dst = cv2.threshold(gray_img, 150, 255, cv2.THRESH_BINARY) # without cv2.THRESH_OTSU it give better results in captcha
+    #gray_img = cv2.imread(img, 0)
+    #blur = cv2.GaussianBlur(gray_img ,(5,5),0)
+    #final_img = cv2.threshold(blur, 150, 255, cv2.THRESH_BINARY)[1] 
+    img = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
 
-    cv2.imshow('threshold Image', dst)
-    cv2.waitKey(0) # Waits for a key event
-    cv2.destroyAllWindows()
+    # 1. Resize (helps OCR a lot)
+    img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
 
-def get_captcha():
+    # 2. Denoise
+    img = cv2.GaussianBlur(img, (5, 5), 0)
+
+    # 4. Threshold (binarize)
+    _, final_img = cv2.threshold(img, 150, 255, cv2.THRESH_BINARY)
+
+
+    #cv2.imshow('threshold Image', final_img)
+    #cv2.waitKey(0) # Waits for a key event
+    #cv2.destroyAllWindows()
+
+def get_captcha(): #Done
+    click(480,515)
+    time.sleep(0.9)
     take_shot = screenshot(region=(214, 384, 516, 176))
     take_shot.save("cap.png")
 
-def cp():
+def get_text(img):
+    global cp_text
+    reader = easyocr.Reader(['en'])   
+    result = reader.readtext(img,detail=0)
+    final_text = " ".join(result)
+    #text = re.sub(r"[{}\[\]_]", "", text)
+    
+    text = re.sub(r"\s+", " ", final_text).strip()
+
+    cp_text = str(TextBlob(text).correct())
+
+def solve_captcha():
+    #get image 
+    get_captcha() #Done
     # clean image 
-    captcha_clean("cap.png")
+    captcha_clean("cap.png") #Done
 
-    #fetch the text and print
-    get_text(dst)
-
-
-
+    #fetch the text and print 
+    get_text(final_img) #Done
+    
+    click(430,603)
+    print("Typing")
+    typewrite(cp_text, interval=0.01)
+    press('tab')
+    time.sleep(0.1)
+    press('enter')
+    print("Typing Completed")
+gui()
 
