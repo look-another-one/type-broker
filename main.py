@@ -5,14 +5,16 @@ from time import sleep
 from pyautogui import typewrite , screenshot
 import re
 import subprocess
-import cv2
+import cv2 # pyright: ignore[reportMissingImports]
 import time 
 import tkinter as tk
 
 # TODO: Next Bypass Cheat Detection Captcha 
 
 project_root = Path(__file__).parent # give the location of folder
-img_loc = project_root / "image.png"
+img_loc = project_root /   "image.png"
+testing = project_root / "assets" /  "6.png"
+
 
 def get_img():
     target_title = "TypeRacer"
@@ -40,15 +42,15 @@ def img_cleaning(img):
     gray_img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
     _, dst = cv2.threshold(gray_img, 150, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-    # cv2.imshow('threshold Image', dst)
-    # cv2.waitKey(0) # Waits for a key event
-    # cv2.destroyAllWindows()
+    cv2.imshow('threshold Image', dst)
+    cv2.waitKey(0) # Waits for a key event
+    cv2.destroyAllWindows()
 
 
 def types(text):
     sleep(2)
     print("Typing")
-    typewrite(text, interval=0.07)
+    typewrite(text, interval=0.05)
     print("Typing Completed")
 
 def fetch(img):
@@ -60,7 +62,7 @@ def fetch(img):
     match = re.search(r'.*(?:0wpm|Owpm|pyOwpm)\s+(.*)', text, flags=re.DOTALL)
     
     if not match:
-        return "Pattern not found."
+        return print("Pattern not found.")
         
     raw_paragraph = match.group(1)
     
@@ -75,7 +77,7 @@ def fetch(img):
     # This removes isolated 1-2 letter lowercase words at the very beginning
     clean_paragraph = re.sub(r'^[a-z]{1,2}\s+', '', clean_paragraph)
     
-    return clean_paragraph
+    return print(clean_paragraph)
 
 def start():
     get_img()
@@ -88,12 +90,30 @@ def gui():
     root.geometry("400x300")  # width x height
     # Get img and clean and fetch
     fetch = tk.Button(root, text="Fetch",bg="blue", fg="white",command=lambda : start())
-    fetch.grid()
+    fetch.pack()
     # start typing yooo!
-    fetch = tk.Button(root, text="Start Typing",bg="blue", fg="white",command=lambda :types(clean_paragraph))
-    fetch.grid()
+    start_typing = tk.Button(root, text="Start Typing",bg="blue", fg="white",command=lambda :types(clean_paragraph))
+    start_typing.pack()
 
+    # Fetch Text from Captcha
+    fetch_captcha = tk.Button(root, text="Fetch Captcha",bg="blue", fg="white",command=lambda :types(clean_paragraph))
+    fetch_captcha.pack()
+    # Start Typing Captcha
+    solve_captcha = tk.Button(root, text="Solve Captcha",bg="blue", fg="white",command=lambda :types(clean_paragraph))
+    solve_captcha.pack()
     root.mainloop()
 
-gui()
+def get_text(img):
+    text = pytesseract.image_to_string(img,config="--psm 3")
+    # text = text.replace("\n"," ")
+    return print(text)
+
+def captcha_clean(img):
+    global dst
+    gray_img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+    _, dst = cv2.threshold(gray_img, 150, 255, cv2.THRESH_BINARY) # without cv2.THRESH_OTSU it give better results in captcha
+
+    cv2.imshow('threshold Image', dst)
+    cv2.waitKey(0) # Waits for a key event
+    cv2.destroyAllWindows()
 
