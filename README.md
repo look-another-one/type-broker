@@ -5,6 +5,9 @@ Type-Broker is a Python script with a Tkinter graphical interface to automate ty
 > ⚠️ **Disclaimer: STRICTLY FOR EDUCATIONAL AND LEARNING PURPOSES.** 
 > This project was created solely for learning about Optical Character Recognition (OCR), computer vision, and GUI automation with Python. It is not intended to be used to cheat or disrupt competitive environments. Use responsibly.
 
+This Work on my Machine 
+You have to change xyz in main.py so it work on your machine
+
 ## Requirements
 
 To run this project, you will need the following system and Python dependencies installed. 
@@ -12,6 +15,7 @@ To run this project, you will need the following system and Python dependencies 
 ### System Dependencies
 The automation relies on X11 tools for window manipulation and screenshots.
 * `tesseract-ocr` (Required for PyTesseract OCR processing)
+* `easyocr` ()
 * `wmctrl` (Required to locate the TypeRacer window coordinates)
 * `gnome-screenshot` (or another screenshot utility compatible with `pyautogui` on your OS)
 * **Note:** This project relies on `wmctrl` and `pyautogui`, which generally require an **Xorg (X11)** display server and may not work natively on Wayland.
@@ -25,6 +29,7 @@ Dependencies defined in `pyproject.toml`:
 * `pillow`
 * `pyautogui`
 * `pytesseract`
+* `...`
 
 ## Installation and Usage
 
