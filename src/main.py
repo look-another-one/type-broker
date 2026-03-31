@@ -1,6 +1,9 @@
 import logging
 from pathlib import Path
 
+from config import image , bg_img
+from gui import gui
+
 Path("logs").mkdir(exist_ok=True)
 
 logging.basicConfig(
@@ -15,24 +18,6 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-
-'''
-Change these Variable based on your display and Preferences
-'''
-
-project_root = Path(__file__).parent.parent
-
-
-image = project_root / "assets" / "image.png"
-
-
-typing_speed = 0.05
-captcha_typing_speed = 0.02
-start_test_button = (480,515)
-captcha_window = (214, 384, 516, 176)
-captcha_typing_panel = (430,603)
-
-
 if __name__ == "__main__":
-    pass
+    gui(image,bg_img)
 

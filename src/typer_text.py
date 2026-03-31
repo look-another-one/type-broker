@@ -1,10 +1,9 @@
 import time
 import logging
 
-
 import pyautogui
 
-from main import typing_speed
+from config import typing_speed
 
 log = logging.getLogger(__name__)
 

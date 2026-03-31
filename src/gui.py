@@ -6,7 +6,6 @@ import logging
 
 
 # importing from Local Files
-from main import image
 from ocr_fetch import text_fetch
 from typer_text import types_the_text
 from capture import text_capture
@@ -17,7 +16,7 @@ fetched_text = ""
 log = logging.getLogger(__name__)
 
 
-def guilayout(background_image_path=None):
+def gui(image,background_image_path=None):
     """
     The whole tkinter GUI of the program
     """
@@ -80,6 +79,3 @@ def fetch_the_text(img_location):
     text_capture() # capture the window
     fetched_text = text_fetch(img_location) # fetch the text from image
 
-
-
-guilayout()

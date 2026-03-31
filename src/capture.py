@@ -9,7 +9,7 @@ import logging
 from pyautogui import click , screenshot
 
 # local files 
-from main import start_test_button , captcha_window  
+from config import start_test_button , captcha_window  
 
 log = logging.getLogger(__name__)
 
