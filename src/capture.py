@@ -50,7 +50,7 @@ def get_img_windows():
     target_title = "TypeRacer"
     x, y, w, h = None, None, None, None
 
-    windows = gw.getWindowsWithTitle(target_title)
+    windows = gw.getWindowsWithTitle(target_title) # type: ignore
     if windows:
         window = windows[0]
         x, y, w, h = window.left, window.top, window.width, window.height

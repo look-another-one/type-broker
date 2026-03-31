@@ -1,4 +1,3 @@
-# from gui import gui 
 import logging
 from pathlib import Path
 
@@ -21,9 +20,10 @@ log = logging.getLogger(__name__)
 Change these Variable based on your display and Preferences
 '''
 
-clean_paragraph = None
+project_root = Path(__file__).parent.parent
 
-project_root = Path(__file__).parent
+
+image = project_root / "assets" / "image.png"
 
 
 typing_speed = 0.05
@@ -34,6 +34,5 @@ captcha_typing_panel = (430,603)
 
 
 if __name__ == "__main__":
-    # gui()
     pass
 
