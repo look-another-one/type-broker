@@ -43,6 +43,7 @@ Download the Specific Version and install it on your computer or refer to the au
    ```bash
    sudo apt update
    sudo apt install tesseract-ocr wmctrl gnome-screenshot python3-tk
+   sudo snap install astral-uv --classic
    ```
 **Alternate Method : ** Use the *automatic install* scripts in the `scripts\` folder.
 
